@@ -1,0 +1,165 @@
+﻿<html>
+    <head>
+        <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+        <style>
+            ul {
+                list-style: none;
+            }
+            #main ul div, #store ul div, #food {
+                border: 1px solid black;
+                width: 100px;
+                padding: 25px;
+                float: left;
+                text-align: center;
+                cursor: pointer;
+            }
+            #store ul {
+                display: none;
+            }
+        </style>
+        <script>
+
+            //var _foodstorelist = '@Html.Raw(ViewBag.foodAppData)'
+            var _foodstorelist = 
+            {"한식":{"원할머니보쌈":{"tip":3000,"minTime":30,"maxTime":50,"score":5,"food":{"보쌈":10000,"족발":10000,"보족":10000}},"BBQ":{"tip":2000,"minTime":20,"maxTime":50,"score":5,"food":{"후라이드":10000,"양념":10000,"간장":10000}},"신전떡볶이":{"tip":2000,"minTime":30,"maxTime":40,"score":5,"food":{"떡볶이":10000,"오뎅":10000,"튀김":10000}}},"중식":{"홍콩반점":{"tip":3000,"minTime":30,"maxTime":50,"score":5,"food":{"짜장":10000,"짬뽕":10000,"탕수육":10000}},"짜장면사무소":{"tip":3000,"minTime":30,"maxTime":50,"score":5,"food":{"짜장":10000,"짬뽕":10000,"탕수육":10000}},"자금성":{"tip":3000,"minTime":30,"maxTime":50,"score":5,"food":{"짜장":10000,"짬뽕":10000,"탕수육":10000}}},"일식":{"홍대개미":{"tip":3000,"minTime":30,"maxTime":50,"score":5,"food":{"스테이크":10000,"연어":10000,"반반":10000}},"오성초밥":{"tip":3000,"minTime":30,"maxTime":50,"score":5,"food":{"모듬":10000,"특급":10000,"스페셜":10000}},"덮덮밥":{"tip":3000,"minTime":30,"maxTime":50,"score":5,"food":{"차돌":10000,"항정살":10000,"살치살":10000}}}}
+            //var _foodstorelist = @ViewBag.foodAppData;
+            
+            var nation = "";    
+            var depth = 1;
+            //go 2depth
+            function main(item)
+            {
+                console.log(item);
+                console.log(_foodstorelist)
+                $("#main").hide();// display: none
+                nation = item;
+                var food = _foodstorelist[item];
+                console.log(food);
+
+                $("#storelist").html("");
+                $.each(food, function(key, value){
+                    console.log('key:' + key + ' / ' + 'value:' + value);
+                    $("#storelist").append('<li><div onclick="store(\'' + key + '\')">' + key + '</div></li>');
+                });
+
+                $("#store ul").show();
+                depth = 2;
+            }
+
+            //go 3depth
+            function store(item)
+            {
+                console.log(item);
+
+                var info = _foodstorelist[nation][item];
+                var tip = info["tip"].toString() + "원"; //불변값 .tip 가능
+                var time = info["minTime"] + "~" + info["maxTime"] + "분";
+                //var time = info["time"];
+                var score = info["score"];
+                var food = info["food"];
+                
+                var scoreText = "";
+                while(score > 0)
+                {
+                    scoreText += "*";
+                    score -= 1;
+                }
+                $("#tip").text("배달료 : " + tip);
+                $("#time").text("배달시간 : " + time);
+                $("#score").text("별점 : " + scoreText);
+
+                
+
+                // <li onclick="food('후라이드치킨', 19000)"><div>후라이드치킨 19,000원</div></li>
+                //     <li onclick="food('양념치킨', 20000)"><div>양념치킨 20,000원</div></li>
+
+                $("#foodlist").html("");
+                $.each(food, function(key, value){
+                    $("#foodlist").append('<li onclick="food(\'' + key + '\',\'' + value + '\')"><div>' + key + ' ' + value + '</div></li>');
+                });
+
+                $("#store").hide();
+                $("#menu").show();
+
+                depth = 3;
+            }
+
+            var foodlist = ""; //문자
+            var totalprice = 0; //숫자
+            function food(name, price)
+            {
+                foodlist = foodlist + name + "(" + price + ")";
+                $("#select").html(foodlist);
+            }
+
+            function numberWithCommas(x) {
+                return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+            }
+
+            function home(){
+                window.location.reload();
+            }
+
+            function back(){
+                //window.history.go(-1); //브라우저 뒤로가기
+                if(depth == 3){
+                    //main(nation);//2뎁스
+                    backinit();
+                    main(nation);
+                }
+                else if (depth == 2){
+                    home();
+                    depth = 1;
+                }
+            }
+
+            function backinit(){
+                $("#menu").hide();
+                $("#store").show();
+                $("foodlist").html("");
+                depth = 2;
+            }
+        </script>
+    </head>
+    <body>
+        <div>
+            <button onclick="home();">홈</button>
+            <button onclick="back();">뒤로가기</button>
+        </div>
+        <!--한식/중식/일식-->
+        <div id="main">
+            <ul>
+                <li><div onclick="main('한식')">한식</div></li>
+                <li><div onclick="main('중식')">중식</div></li>
+                <li><div onclick="main('일식')">일식</div></li>
+            </ul>
+        </div>
+        <!--음식점 선택-->
+        <div id="store">
+            <ul id="storelist"></ul>
+        </div>
+        <!--메뉴-->
+        <div id="menu" style="display: none;">
+            <h1 id="storename"></h1>
+            <div>
+                <div id="tip">배달팁 : 3500원</div>
+                <div id="time">배달소요시간 : 30~50분</div>
+                <div id="score">별점 : *</div>
+            </div>
+            <h1>메뉴</h1>
+            <div id="food">
+                <ul id="foodlist">
+
+                </ul><div></div>
+            </div>
+            <br><br><br><br><br><br><br><br><br><br><br><br><br>
+
+            <h1>선택한 메뉴</h1>
+            <div>
+                <div id="select"></div>
+                <div id="price"></div>
+            </div>
+        </div>
+
+    </body>
+</html>

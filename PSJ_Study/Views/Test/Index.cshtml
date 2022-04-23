@@ -1,0 +1,76 @@
+﻿@{
+    
+}
+<script src="https://code.jquery.com/jquery-1.11.3.js"></script>
+<script>
+    //var list = '@Html.Raw(ViewBag.aList);
+    console.log("start");
+    var list = 
+                    {
+                    "한식" : {
+                        "원할머니보쌈" : {
+                            "tip" : "3,000원",
+                            "time" : "30~50분",
+                            "score" : 5,
+                            "food" : {
+                                "보쌈" : "19,000원",
+                                "족발" : "19,000원",
+                                "반반" : "22,000원"
+                            }
+                        },
+                        "BBQ" : {
+                            "tip" : "2,000원",
+                            "time" : "20~50분",
+                            "score" : 5,
+                            "food" : {
+                                "후라이드" : "19,000원",
+                                "양념" : "19,000원",
+                                "간장" : "19,000원"
+                            }
+                        },
+                        "신전떡볶이" : {
+                            "tip" : "2,000원",
+                            "time" : "30~40분",
+                            "score" : 5,
+                            "food" : {
+                                "떡볶이" : "12,000원",
+                                "오뎅" : "8,000원",
+                                "튀김" : "8,000원"
+                            }
+                        }
+                    }
+                }
+
+    var list2 = {
+        "한식":{
+            "원할머니보쌈":{
+                "tip":"3000",
+                "time":"30",
+                "score":5,
+                "food":{
+                    "보쌈":"10000",
+                    "족발":"10000",
+                    "보족":"10000"
+                }
+            },
+            "BBQ":{
+                "tip":"2000",
+                "time":"20",
+                "score":5,
+                "food":{
+                    "후라이드":"10000",
+                    "양념":"10000",
+                    "간장":"10000"
+                }
+            }
+        }
+    }
+    console.log(list);
+    console.log(list2);
+
+    $("#list").append(list);
+    console.log(list);
+</script>
+<div id="list">
+
+</div>
